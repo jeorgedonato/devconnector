@@ -39,16 +39,14 @@ const ProfileSchema = new mongoose.Schema({
         required: true
       },
       location: {
-        type: String,
-        required: true
+        type: String
       },
       from: {
         type: String,
         required: true
       },
       to: {
-        type: String,
-        required: true
+        type: String
       },
       current: {
         type: Boolean,

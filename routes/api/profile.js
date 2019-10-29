@@ -1,16 +1,242 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
+const { check, validationResult } = require('express-validator');
+
+const Profile = require('../../models/Profile');
+const User = require('../../models/User');
 
 //@route    GET api/profile/me
 //@desc     Get current users profile
 //@access   Private
-router.get('/', auth, async (req, res) => {
+router.get('/me', auth, async (req, res) => {
   try {
+    const profile = await Profile.findOne({ user: req.user.id }).populate(
+      'user',
+      ['name', 'avatar']
+    );
+
+    if (!profile) {
+      return res.status(400).json({ msg: 'There is no Profile for this user' });
+    }
+
+    res.json(profile);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
+});
+//END GET Profile /me
+
+//@route    POST api/profile
+//@desc     Create or Update User Profile
+//@access   Private
+router.post(
+  '/',
+  [
+    auth,
+    [
+      check('status', 'Status is Required')
+        .not()
+        .isEmpty(),
+      check('skills', 'Skills is Required')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      company,
+      website,
+      location,
+      bio,
+      status,
+      githubusername,
+      skills,
+      youtube,
+      facebook,
+      twitter,
+      instagram,
+      linkedin
+    } = req.body;
+    console.log(req.body);
+
+    //Build Profile Object
+    const profileFields = {};
+    profileFields.user = req.user.id;
+    if (company) profileFields.company = company;
+    if (website) profileFields.website = website;
+    if (location) profileFields.location = location;
+    if (bio) profileFields.bio = bio;
+    if (status) profileFields.status = status;
+    if (githubusername) profileFields.githubusername = githubusername;
+    if (skills)
+      profileFields.skills = skills.split(',').map(skill => skill.trim());
+
+    //Build Social Object
+    profileFields.social = {};
+    if (youtube) profileFields.social.youtube = youtube;
+    if (twitter) profileFields.social.twitter = twitter;
+    if (facebook) profileFields.social.facebook = facebook;
+    if (linkedin) profileFields.social.linkedin = linkedin;
+    if (instagram) profileFields.social.instagram = instagram;
+
+    try {
+      //Update Profile
+      let profile = await Profile.findOne({ user: req.user.id });
+
+      if (profile) {
+        console.log(profileFields);
+        profile = await Profile.findOneAndUpdate(
+          { user: req.user.id },
+          { $set: profileFields },
+          { new: true }
+        );
+
+        return res.json(profile);
+      }
+
+      //Create Profile if no data exists
+      profile = new Profile(profileFields);
+      await profile.save();
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+// END Create and Update Profile
+
+//@route    GET api/profile
+//@desc     GET All Profile
+//@access   Public
+router.get('/', async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+//END Get All Profiles
+
+//@route    GET api/profile/user/:user_id
+//@desc     GET Profile by User ID
+//@access   Public
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id
+    }).populate('user', ['name', 'avatar']);
+
+    if (!profile) return res.status(400).json({ msg: 'Profile not found!' });
+
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind == 'ObjectId') {
+      return res.status(400).json({ msg: 'Profile not found!' });
+    }
+    res.status(500).send('Server Error');
+  }
+});
+//END Get Profile by user ID
+
+//@route    DLETE api/profile
+//@desc     DELETE Profile, User and Posts
+//@access   Private
+router.delete('/', auth, async (req, res) => {
+  try {
+    //TODO Delete posts from user
+    await Profile.findOneAndRemove({ user: req.user.id });
+
+    await User.findOneAndRemove({ _id: req.user.id });
+
+    res.json({ msg: 'User Deleted!' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+//END DELETE User
+
+//@route    PUT api/profile/experience
+//@desc     Add User Profile Experience
+//@access   Private
+router.put(
+  '/experience',
+  [
+    auth,
+    [
+      check('title', 'Title is Required')
+        .not()
+        .isEmpty(),
+      check('company', 'Company is Required')
+        .not()
+        .isEmpty(),
+      check('from', 'From date is Required')
+        .not()
+        .isEmpty(),
+      check('current', 'Current is Required')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description
+    } = req.body;
+
+    const newExp = {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      profile.experience.unshift(newExp);
+
+      await profile.save();
+      res.json(profile);
+    } catch (err) {
+      console.log(err);
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+//END Add Profile Experience
+
+//@route    DLETE api/profile/experience
+//@desc     DELETE Profile Experience
+//@access   Private
+router.delete('/experience/:pexp_id', auth, async (req, res) => {
+  let profile = await Profile.findOne({ user: req.user.id });
 });
 
 module.exports = router;
