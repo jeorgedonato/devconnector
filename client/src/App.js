@@ -6,22 +6,26 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import './App.css';
 import 'typeface-roboto';
-// import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+//Redux
+import { Provider } from 'react-redux';
+import store from './store';
 
 const App = () => (
-	<Router>
-		<Fragment>
-			<Navbar />
-			<Route exact path='/' component={Landing} />
-			<Container>
-				<Switch>
-					<Route exact path='/register' component={Register} />
-					<Route exact path='/login' component={Login} />
-				</Switch>
-			</Container>
-		</Fragment>
-	</Router>
+	<Provider store={store}>
+		<Router>
+			<Fragment>
+				<Navbar />
+				<Route exact path='/' component={Landing} />
+				<Container>
+					<Switch>
+						<Route exact path='/register' component={Register} />
+						<Route exact path='/login' component={Login} />
+					</Switch>
+				</Container>
+			</Fragment>
+		</Router>
+	</Provider>
 );
 
 export default App;
