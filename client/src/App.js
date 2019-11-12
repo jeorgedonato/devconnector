@@ -4,6 +4,7 @@ import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import Alert from './components/layout/Alert';
 import './App.css';
 import 'typeface-roboto';
 import Container from '@material-ui/core/Container';
@@ -17,7 +18,8 @@ const App = () => (
 			<Fragment>
 				<Navbar />
 				<Route exact path='/' component={Landing} />
-				<Container>
+				<Container maxWidth='md' style={{ marginTop: '50px' }}>
+					<Alert />
 					<Switch>
 						<Route exact path='/register' component={Register} />
 						<Route exact path='/login' component={Login} />
