@@ -17,6 +17,7 @@ import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
 import { Link } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
@@ -47,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register }) => {
 	const classes = useStyles();
 
 	const [formData, setFormData] = useState({
@@ -78,7 +79,7 @@ const Register = ({ setAlert }) => {
 			setFormData({ ...formData, password: '', cpassword: '' });
 			setAlert('Passwords don`t match ', 'error');
 		} else {
-			console.log(formData);
+			register({ name, email, password });
 		}
 	};
 
@@ -140,6 +141,7 @@ const Register = ({ setAlert }) => {
 						type={showPassword ? 'text' : 'password'}
 						onChange={onChange('password')}
 						value={password}
+						inputProps={{ min: 6, max: 128 }}
 						endAdornment={
 							<InputAdornment position='end'>
 								<IconButton
@@ -166,6 +168,7 @@ const Register = ({ setAlert }) => {
 						type={showPassword ? 'text' : 'password'}
 						onChange={onChange('cpassword')}
 						value={cpassword}
+						inputProps={{ min: 6, max: 128 }}
 						endAdornment={
 							<InputAdornment position='end'>
 								<IconButton
@@ -194,7 +197,8 @@ const Register = ({ setAlert }) => {
 };
 
 Register.propTypes = {
-	setAlert: PropTypes.func.isRequired
+	setAlert: PropTypes.func.isRequired,
+	register: PropTypes.func.isRequired
 };
 
-export default connect(null, { setAlert })(Register);
+export default connect(null, { setAlert, register })(Register);
