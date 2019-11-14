@@ -11,72 +11,72 @@ const { check, validationResult } = require('express-validator');
 //@desc     Test route
 //@access   Public
 router.get('/', auth, async (req, res) => {
-  console.log(req.user);
-  try {
-    const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
+	// console.log(req.user);
+	try {
+		const user = await User.findById(req.user.id).select('-password');
+		res.json(user);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server Error');
+	}
 });
 
 //@route    POST api/auth
 //@desc     Authenticate User && Get token
 //@access   Public
 router.post(
-  '/',
-  [
-    check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Password is Required').exists()
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+	'/',
+	[
+		check('email', 'Please include a valid email').isEmail(),
+		check('password', 'Password is Required').exists()
+	],
+	async (req, res) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ errors: errors.array() });
+		}
 
-    const { email, password } = req.body;
+		const { email, password } = req.body;
 
-    try {
-      let user = await User.findOne({ email });
+		try {
+			let user = await User.findOne({ email });
 
-      if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Invalid Credentials' }] });
-      }
+			if (!user) {
+				return res
+					.status(400)
+					.json({ errors: [{ msg: 'Invalid Credentials' }] });
+			}
 
-      const isMatch = await bcrypt.compare(password, user.password);
+			const isMatch = await bcrypt.compare(password, user.password);
 
-      if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Invalid Credentials' }] });
-      }
+			if (!isMatch) {
+				return res
+					.status(400)
+					.json({ errors: [{ msg: 'Invalid Credentials' }] });
+			}
 
-      const payload = {
-        user: {
-          id: user.id
-        }
-      };
+			const payload = {
+				user: {
+					id: user.id
+				}
+			};
 
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
-    }
+			jwt.sign(
+				payload,
+				config.get('jwtSecret'),
+				{ expiresIn: 360000 },
+				(err, token) => {
+					if (err) throw err;
+					res.json({ token });
+				}
+			);
+		} catch (err) {
+			console.error(err.message);
+			res.status(500).send('Server error');
+		}
 
-    //See if user exist
-  }
+		//See if user exist
+	}
 );
 
 module.exports = router;

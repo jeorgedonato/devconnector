@@ -12,7 +12,11 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { login } from '../../actions/auth';
+import { setAlert } from '../../actions/alert';
 
 const useStyles = makeStyles(theme => ({
 	'@global': {
@@ -42,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Login = () => {
+const Login = ({ login, isAuthenticated }) => {
 	const classes = useStyles();
 
 	const [formData, setFormData] = useState({
@@ -66,8 +70,13 @@ const Login = () => {
 	};
 
 	const onSubmit = e => {
-		console.log(formData);
+		e.preventDefault();
+		login(email, password);
 	};
+
+	if (isAuthenticated) {
+		return <Redirect to='/dashboard' />;
+	}
 
 	return (
 		<Fragment>
@@ -112,6 +121,7 @@ const Login = () => {
 						type={showPassword ? 'text' : 'password'}
 						onChange={onChange('password')}
 						value={password}
+						inputProps={{ min: 6, max: 128 }}
 						endAdornment={
 							<InputAdornment position='end'>
 								<IconButton
@@ -135,5 +145,14 @@ const Login = () => {
 		</Fragment>
 	);
 };
+Login.propTypes = {
+	login: PropTypes.func.isRequired,
+	setAlert: PropTypes.func.isRequired,
+	isAuthenticated: PropTypes.bool
+};
 
-export default Login;
+const mapStateToProps = state => ({
+	isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { setAlert, login })(Login);
