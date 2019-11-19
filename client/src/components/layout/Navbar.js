@@ -56,9 +56,13 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 	const authLinks = (
 		<Fragment>
 			<Box component='span' display={{ xs: 'none', md: 'block' }} m={1}>
-				<ExitToApp />
 				{/* <Typography variant='h6' className={classes.title}> */}
-				<Button onClick={logout} color='inherit' className={classes.btText}>
+				<Button
+					onClick={logout}
+					color='inherit'
+					className={classes.btText}
+					startIcon={<ExitToApp />}
+				>
 					Logout
 				</Button>
 				{/* </Typography> */}
@@ -174,13 +178,13 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 		<div className={classes.root}>
 			<AppBar position='static'>
 				<Toolbar className='bg-dark'>
-					<CodeIcon />
 					<Typography variant='h6' className={classes.title}>
 						<Button
 							component={Link}
 							to='/'
 							color='inherit'
 							className={classes.btText}
+							startIcon={<CodeIcon />}
 						>
 							DevConnector
 						</Button>

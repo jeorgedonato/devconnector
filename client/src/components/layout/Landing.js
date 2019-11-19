@@ -4,9 +4,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import BgImage from '../../images/showcase.jpg';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -39,8 +41,11 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Landing = () => {
+const Landing = ({ isAuthenticated }) => {
 	let classes = useStyles();
+	if (isAuthenticated) {
+		return <Redirect to='/dashboard' />;
+	}
 
 	return (
 		<React.Fragment>
@@ -82,4 +87,12 @@ const Landing = () => {
 	);
 };
 
-export default Landing;
+Landing.propTypes = {
+	isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+	isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps)(Landing);
