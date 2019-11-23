@@ -95,7 +95,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 					Register
 				</Typography>
 				<Typography component='p' style={{ display: 'flex' }}>
-					<Icon fontSize='small'>person</Icon>
+					<Icon fontSize='small'>person_add</Icon>
 					<Typography component='span' variant='body1'>
 						Create your account
 					</Typography>

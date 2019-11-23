@@ -18,7 +18,12 @@ import { logout } from '../../actions/auth';
 
 const useStyles = makeStyles(theme => ({
 	root: {
-		flexGrow: 1
+		flexGrow: 1,
+		position: 'fixed',
+		top: 0,
+		width: '100%',
+		opacity: '0.97',
+		justifyContent: 'space-between'
 	},
 	menuButton: {
 		marginRight: theme.spacing(2)
@@ -56,7 +61,6 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 	const authLinks = (
 		<Fragment>
 			<Box component='span' display={{ xs: 'none', md: 'block' }} m={1}>
-				{/* <Typography variant='h6' className={classes.title}> */}
 				<Button
 					onClick={logout}
 					color='inherit'
