@@ -80,68 +80,70 @@ const Login = ({ login, isAuthenticated }) => {
 
 	return (
 		<Fragment>
-			<CssBaseline />
-			<div style={{ display: 'block' }}>
-				<Typography component='h1' variant='h5' color='textPrimary'>
-					Login
-				</Typography>
-				<Typography component='p' style={{ display: 'flex' }}>
-					<Icon fontSize='small'>person</Icon>
-					<Typography component='span' variant='body1'>
-						Sign In to your account
+			<div style={{ marginTop: '6rem', marginBottom: '3rem' }}>
+				<CssBaseline />
+				<div style={{ display: 'block' }}>
+					<Typography component='h1' variant='h5' color='textPrimary'>
+						Login
 					</Typography>
+					<Typography component='p' style={{ display: 'flex' }}>
+						<Icon fontSize='small'>person</Icon>
+						<Typography component='span' variant='body1'>
+							Sign In to your account
+						</Typography>
+					</Typography>
+				</div>
+
+				<form className={classes.form} onSubmit={e => onSubmit(e)}>
+					<FormControl
+						className={clsx(classes.margin, classes.textField)}
+						fullWidth
+						required
+						margin='dense'
+					>
+						<InputLabel htmlFor='email-input'>Email</InputLabel>
+						<Input
+							id='email-input'
+							type='email'
+							onChange={onChange('email')}
+							value={email}
+						/>
+					</FormControl>
+
+					<FormControl
+						className={clsx(classes.margin, classes.textField)}
+						fullWidth
+						required
+						margin='dense'
+					>
+						<InputLabel htmlFor='password-input'>Password</InputLabel>
+						<Input
+							id='password-input'
+							type={showPassword ? 'text' : 'password'}
+							onChange={onChange('password')}
+							value={password}
+							inputProps={{ min: 6, max: 128 }}
+							endAdornment={
+								<InputAdornment position='end'>
+									<IconButton
+										aria-label='toggle password visibility'
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+									>
+										{showPassword ? <Visibility /> : <VisibilityOff />}
+									</IconButton>
+								</InputAdornment>
+							}
+						/>
+					</FormControl>
+					<Button variant='contained' color='primary' type='submit'>
+						Sign In
+					</Button>
+				</form>
+				<Typography component='p' variant='subtitle1'>
+					Don't have an account? <Link to='/register'>Register</Link>
 				</Typography>
 			</div>
-
-			<form className={classes.form} onSubmit={e => onSubmit(e)}>
-				<FormControl
-					className={clsx(classes.margin, classes.textField)}
-					fullWidth
-					required
-					margin='dense'
-				>
-					<InputLabel htmlFor='email-input'>Email</InputLabel>
-					<Input
-						id='email-input'
-						type='email'
-						onChange={onChange('email')}
-						value={email}
-					/>
-				</FormControl>
-
-				<FormControl
-					className={clsx(classes.margin, classes.textField)}
-					fullWidth
-					required
-					margin='dense'
-				>
-					<InputLabel htmlFor='password-input'>Password</InputLabel>
-					<Input
-						id='password-input'
-						type={showPassword ? 'text' : 'password'}
-						onChange={onChange('password')}
-						value={password}
-						inputProps={{ min: 6, max: 128 }}
-						endAdornment={
-							<InputAdornment position='end'>
-								<IconButton
-									aria-label='toggle password visibility'
-									onClick={handleClickShowPassword}
-									onMouseDown={handleMouseDownPassword}
-								>
-									{showPassword ? <Visibility /> : <VisibilityOff />}
-								</IconButton>
-							</InputAdornment>
-						}
-					/>
-				</FormControl>
-				<Button variant='contained' color='primary' type='submit'>
-					Sign In
-				</Button>
-			</form>
-			<Typography component='p' variant='subtitle1'>
-				Don't have an account? <Link to='/register'>Register</Link>
-			</Typography>
 		</Fragment>
 	);
 };

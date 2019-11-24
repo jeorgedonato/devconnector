@@ -19,23 +19,27 @@ const Dashboard = ({
 		<Spinner />
 	) : (
 		<Fragment>
-			<h1>Dashboard</h1>
-			<p>Welcome {user && user.name}</p>
-			{profile !== null ? (
-				<Fragment></Fragment>
-			) : (
-				<Fragment>
-					<p>You have not yet setup a profile, please add some info</p>
-					<Button
-						component={Link}
-						to='/create-profile'
-						variant='contained'
-						color='primary'
-					>
-						Create Profile
-					</Button>
-				</Fragment>
-			)}
+			<div style={{ marginTop: '6rem', marginBottom: '3rem' }}>
+				<h1>Dashboard</h1>
+				<p>Welcome {user && user.name}</p>
+				{profile !== null ? (
+					<Fragment>
+						<p>You have a profile</p>
+					</Fragment>
+				) : (
+					<Fragment>
+						<p>You have not yet setup a profile, please add some info</p>
+						<Button
+							component={Link}
+							to='/create-profile'
+							variant='contained'
+							color='primary'
+						>
+							Create Profile
+						</Button>
+					</Fragment>
+				)}
+			</div>
 		</Fragment>
 	);
 };

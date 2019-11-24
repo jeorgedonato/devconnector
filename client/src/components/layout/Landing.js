@@ -50,7 +50,7 @@ const Landing = ({ isAuthenticated }) => {
 	return (
 		<React.Fragment>
 			<CssBaseline />
-			<Container maxWidth='xl' className={classes.root}>
+			<Container maxWidth='xl' className={classes.root} component='section'>
 				<Typography component='div' className={classes.darkOverlay}>
 					<Typography component='div' className={classes.landingInner}>
 						<Typography variant='h2' component='h2'>

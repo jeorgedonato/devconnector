@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
 		top: 0,
 		width: '100%',
 		opacity: '0.97',
-		justifyContent: 'space-between'
+		justifyContent: 'space-between',
+		zIndex: '1'
 	},
 	menuButton: {
 		marginRight: theme.spacing(2)

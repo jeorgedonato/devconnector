@@ -35,7 +35,8 @@ const styles = makeStyles(theme => ({
 		alignItems: 'center'
 	},
 	alertStyle: {
-		marginBottom: '20px'
+		marginBottom: '-70px',
+		marginTop: '75px'
 	}
 }));
 

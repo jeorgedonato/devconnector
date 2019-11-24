@@ -34,7 +34,7 @@ const App = () => {
 					<Route exact path='/' component={Landing} />
 					<Container
 						maxWidth='md'
-						style={{ marginTop: '6rem', marginBottom: '3rem' }}
+						// style={{ marginTop: '6rem', marginBottom: '3rem' }}
 					>
 						<Alert />
 						<Switch>

@@ -89,113 +89,115 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
 	return (
 		<Fragment>
-			<CssBaseline />
-			<div style={{ display: 'block' }}>
-				<Typography component='h1' variant='h5' color='textPrimary'>
-					Register
-				</Typography>
-				<Typography component='p' style={{ display: 'flex' }}>
-					<Icon fontSize='small'>person_add</Icon>
-					<Typography component='span' variant='body1'>
-						Create your account
+			<div style={{ marginTop: '6rem', marginBottom: '3rem' }}>
+				<CssBaseline />
+				<div style={{ display: 'block' }}>
+					<Typography component='h1' variant='h5' color='textPrimary'>
+						Register
 					</Typography>
+					<Typography component='p' style={{ display: 'flex' }}>
+						<Icon fontSize='small'>person_add</Icon>
+						<Typography component='span' variant='body1'>
+							Create your account
+						</Typography>
+					</Typography>
+				</div>
+
+				<form className={classes.form} onSubmit={e => onSubmit(e)}>
+					<TextField
+						required
+						id='name-input'
+						label='Name'
+						className={classes.textField}
+						fullWidth
+						onChange={onChange('name')}
+						margin='dense'
+						value={name}
+					/>
+
+					<FormControl
+						className={clsx(classes.margin, classes.textField)}
+						fullWidth
+						required
+						margin='dense'
+					>
+						<InputLabel htmlFor='email-input'>Email</InputLabel>
+						<Input
+							id='email-input'
+							type='email'
+							onChange={onChange('email')}
+							value={email}
+						/>
+						<FormHelperText id='email-input-helper'>
+							This site uses Gravatar so if you want a profile image, use a
+							gravatar email
+						</FormHelperText>
+					</FormControl>
+
+					<FormControl
+						className={clsx(classes.margin, classes.textField)}
+						fullWidth
+						required
+						margin='dense'
+					>
+						<InputLabel htmlFor='password-input'>Password</InputLabel>
+						<Input
+							id='password-input'
+							type={showPassword ? 'text' : 'password'}
+							onChange={onChange('password')}
+							value={password}
+							inputProps={{ min: 6, max: 128 }}
+							endAdornment={
+								<InputAdornment position='end'>
+									<IconButton
+										aria-label='toggle password visibility'
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+									>
+										{showPassword ? <Visibility /> : <VisibilityOff />}
+									</IconButton>
+								</InputAdornment>
+							}
+						/>
+					</FormControl>
+
+					<FormControl
+						className={clsx(classes.margin, classes.textField)}
+						fullWidth
+						required
+						margin='dense'
+					>
+						<InputLabel htmlFor='cpassword-input'>Confirm Password</InputLabel>
+						<Input
+							id='cpassword-input'
+							type={showPassword ? 'text' : 'password'}
+							onChange={onChange('cpassword')}
+							value={cpassword}
+							inputProps={{ min: 6, max: 128 }}
+							endAdornment={
+								<InputAdornment position='end'>
+									<IconButton
+										aria-label='toggle password visibility'
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+									>
+										{showPassword ? <Visibility /> : <VisibilityOff />}
+									</IconButton>
+								</InputAdornment>
+							}
+						/>
+						<FormHelperText id='passwords-input-helper'>
+							Passwords must match
+						</FormHelperText>
+					</FormControl>
+					<Button variant='contained' color='primary' type='submit'>
+						Register
+					</Button>
+				</form>
+				<Typography component='p' variant='subtitle1'>
+					Already have an account? <Link to='/login'>Login</Link>
 				</Typography>
 			</div>
-
-			<form className={classes.form} onSubmit={e => onSubmit(e)}>
-				<TextField
-					required
-					id='name-input'
-					label='Name'
-					className={classes.textField}
-					fullWidth
-					onChange={onChange('name')}
-					margin='dense'
-					value={name}
-				/>
-
-				<FormControl
-					className={clsx(classes.margin, classes.textField)}
-					fullWidth
-					required
-					margin='dense'
-				>
-					<InputLabel htmlFor='email-input'>Email</InputLabel>
-					<Input
-						id='email-input'
-						type='email'
-						onChange={onChange('email')}
-						value={email}
-					/>
-					<FormHelperText id='email-input-helper'>
-						This site uses Gravatar so if you want a profile image, use a
-						gravatar email
-					</FormHelperText>
-				</FormControl>
-
-				<FormControl
-					className={clsx(classes.margin, classes.textField)}
-					fullWidth
-					required
-					margin='dense'
-				>
-					<InputLabel htmlFor='password-input'>Password</InputLabel>
-					<Input
-						id='password-input'
-						type={showPassword ? 'text' : 'password'}
-						onChange={onChange('password')}
-						value={password}
-						inputProps={{ min: 6, max: 128 }}
-						endAdornment={
-							<InputAdornment position='end'>
-								<IconButton
-									aria-label='toggle password visibility'
-									onClick={handleClickShowPassword}
-									onMouseDown={handleMouseDownPassword}
-								>
-									{showPassword ? <Visibility /> : <VisibilityOff />}
-								</IconButton>
-							</InputAdornment>
-						}
-					/>
-				</FormControl>
-
-				<FormControl
-					className={clsx(classes.margin, classes.textField)}
-					fullWidth
-					required
-					margin='dense'
-				>
-					<InputLabel htmlFor='cpassword-input'>Confirm Password</InputLabel>
-					<Input
-						id='cpassword-input'
-						type={showPassword ? 'text' : 'password'}
-						onChange={onChange('cpassword')}
-						value={cpassword}
-						inputProps={{ min: 6, max: 128 }}
-						endAdornment={
-							<InputAdornment position='end'>
-								<IconButton
-									aria-label='toggle password visibility'
-									onClick={handleClickShowPassword}
-									onMouseDown={handleMouseDownPassword}
-								>
-									{showPassword ? <Visibility /> : <VisibilityOff />}
-								</IconButton>
-							</InputAdornment>
-						}
-					/>
-					<FormHelperText id='passwords-input-helper'>
-						Passwords must match
-					</FormHelperText>
-				</FormControl>
-				<Button variant='contained' color='primary' type='submit'>
-					Register
-				</Button>
-			</form>
-			<Typography component='p' variant='subtitle1'>
-				Already have an account? <Link to='/login'>Login</Link>
-			</Typography>
 		</Fragment>
 	);
 };
