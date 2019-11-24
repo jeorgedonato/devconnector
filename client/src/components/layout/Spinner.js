@@ -7,9 +7,10 @@ export default () => (
 			<CircularProgress
 				style={{
 					display: 'block',
-					// margin: '60px 0px 20px 0px',
-					width: '200px',
-					height: '200px'
+					// margin: '250px 0px 20px 250px',
+					width: '160px',
+					height: '160px'
+					// top: '-50px'
 				}}
 			/>
 		</div>

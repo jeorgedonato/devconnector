@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
@@ -14,7 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import { setAlert } from '../../actions/alert';
 import { Button } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
-import { createProfile } from '../../actions/profile';
+import { createProfile, getCurrentProfile } from '../../actions/profile';
 
 const useStyles = makeStyles(theme => ({
 	'@global': {
@@ -44,11 +44,13 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const CreateProfile = ({
+const EditProfile = ({
+	profile: { profile, loading },
 	isAuthenticated,
 	setAlert,
 	createProfile,
-	history
+	history,
+	getCurrentProfile
 }) => {
 	const classes = useStyles();
 
@@ -71,6 +73,30 @@ const CreateProfile = ({
 	});
 
 	const [showSocial, setShowSocial] = useState(false);
+
+	useEffect(() => {
+		getCurrentProfile();
+
+		setFormData({
+			company: loading || !profile.company ? '' : profile.company,
+			website: loading || !profile.website ? '' : profile.website,
+			location: loading || !profile.location ? '' : profile.location,
+			status: loading || !profile.status ? '' : profile.status,
+			skills: loading || !profile.skills ? '' : profile.skills.join(','),
+			githubusername:
+				loading || !profile.githubusername ? '' : profile.githubusername,
+			bio: loading || !profile.bio ? '' : profile.bio,
+			twitter: loading || !profile.social ? '' : profile.social.twitter,
+			facebook: loading || !profile.social ? '' : profile.social.facebook,
+			linkedin: loading || !profile.social ? '' : profile.social.linkedin,
+			youtube: loading || !profile.social ? '' : profile.social.youtube,
+			instagram: loading || !profile.social ? '' : profile.social.instagram
+		});
+
+		loading || profile.social !== null
+			? setShowSocial(true)
+			: setShowSocial(false);
+	}, [loading]);
 
 	const {
 		company,
@@ -95,7 +121,7 @@ const CreateProfile = ({
 	const onSubmit = e => {
 		e.preventDefault();
 
-		createProfile(formData, history);
+		createProfile(formData, history, true);
 		// if (password !== cpassword) {
 		// 	// setFormData({ ...formData, password: '', cpassword: '' });
 		// 	// setAlert('Passwords don`t match ', 'error');
@@ -388,7 +414,7 @@ const CreateProfile = ({
 						type='submit'
 						style={{ marginRight: '2px' }}
 					>
-						Create
+						Update
 					</Button>
 
 					<Button
@@ -404,16 +430,21 @@ const CreateProfile = ({
 	);
 };
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
 	isAuthenticated: PropTypes.bool,
 	setAlert: PropTypes.func.isRequired,
-	createProfile: PropTypes.func.isRequired
+	createProfile: PropTypes.func.isRequired,
+	getCurrentProfile: PropTypes.func.isRequired,
+	profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-	isAuthenticated: state.auth.isAuthenticated
+	isAuthenticated: state.auth.isAuthenticated,
+	profile: state.profile
 });
 
-export default connect(mapStateToProps, { createProfile, setAlert })(
-	withRouter(CreateProfile)
-);
+export default connect(mapStateToProps, {
+	createProfile,
+	setAlert,
+	getCurrentProfile
+})(withRouter(EditProfile));

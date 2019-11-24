@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { getCurrentProfile } from '../../actions/profile';
 import Spinner from '../layout/Spinner';
 import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 import { Link } from 'react-router-dom';
+import DashboardActions from '../dashboard/DashboardActions';
 
 const Dashboard = ({
 	getCurrentProfile,
@@ -21,10 +23,13 @@ const Dashboard = ({
 		<Fragment>
 			<div style={{ marginTop: '6rem', marginBottom: '3rem' }}>
 				<h1>Dashboard</h1>
-				<p>Welcome {user && user.name}</p>
+				<p>
+					Welcome <Icon>face</Icon>
+					{user && user.name}
+				</p>
 				{profile !== null ? (
 					<Fragment>
-						<p>You have a profile</p>
+						<DashboardActions />
 					</Fragment>
 				) : (
 					<Fragment>
