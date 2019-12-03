@@ -7,6 +7,8 @@ import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import { Link } from 'react-router-dom';
 import DashboardActions from '../dashboard/DashboardActions';
+import Experience from '../dashboard/Experience';
+import Education from '../dashboard/Education';
 
 const Dashboard = ({
 	getCurrentProfile,
@@ -24,12 +26,13 @@ const Dashboard = ({
 			<div style={{ marginTop: '6rem', marginBottom: '3rem' }}>
 				<h1>Dashboard</h1>
 				<p>
-					Welcome <Icon>face</Icon>
-					{user && user.name}
+					<Icon>face</Icon> Welcome {user && user.name}
 				</p>
 				{profile !== null ? (
 					<Fragment>
 						<DashboardActions />
+						<Experience experience={profile.experience} />
+						<Education education={profile.education} />
 					</Fragment>
 				) : (
 					<Fragment>

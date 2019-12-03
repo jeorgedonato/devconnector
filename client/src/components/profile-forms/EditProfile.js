@@ -92,10 +92,8 @@ const EditProfile = ({
 			youtube: loading || !profile.social ? '' : profile.social.youtube,
 			instagram: loading || !profile.social ? '' : profile.social.instagram
 		});
-
-		loading || profile.social !== null
-			? setShowSocial(true)
-			: setShowSocial(false);
+		// eslint-disable-next-line
+		loading || profile.social ? setShowSocial(true) : setShowSocial(false);
 	}, [loading]);
 
 	const {
@@ -135,7 +133,7 @@ const EditProfile = ({
 			<div style={{ marginTop: '6rem', marginBottom: '3rem' }}>
 				<div style={{ display: 'block' }}>
 					<Typography component='h1' variant='h5' color='textPrimary'>
-						Create Your Profile
+						Edit Your Profile
 					</Typography>
 					<Typography component='p' style={{ display: 'flex' }}>
 						<Icon fontSize='small'>person_outline</Icon>
@@ -409,6 +407,7 @@ const EditProfile = ({
 						</Fragment>
 					)}
 					<Button
+						startIcon={<Icon>save</Icon>}
 						variant='contained'
 						color='primary'
 						type='submit'

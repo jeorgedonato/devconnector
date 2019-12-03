@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToApp from '@material-ui/icons/ExitToApp';
+import Face from '@material-ui/icons/Face';
 import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -46,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
+const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
 	let classes = useStyles();
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
@@ -62,6 +63,9 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 	const authLinks = (
 		<Fragment>
 			<Box component='span' display={{ xs: 'none', md: 'block' }} m={1}>
+				<Button color='inherit' className={classes.btText} startIcon={<Face />}>
+					{user && user.name}
+				</Button>
 				<Button
 					onClick={logout}
 					color='inherit'
@@ -96,6 +100,12 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 					onClose={handleClose}
 					classes={{ paper: classes.menuBg }}
 				>
+					<MenuItem>
+						<Face className={classes.colorTextW} />{' '}
+						<Typography className={classes.colorTextW}>
+							{user && user.name}
+						</Typography>
+					</MenuItem>
 					<MenuItem onClick={logout}>
 						<ExitToApp className={classes.colorTextW} />
 						<Typography className={classes.colorTextW}>Logout</Typography>
@@ -206,10 +216,12 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 Navbar.propTypes = {
 	logout: PropTypes.func.isRequired,
 	auth: PropTypes.object.isRequired
+	// user: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
 	auth: state.auth
+	// user: state.auth.user
 });
 
 export default connect(mapStateToProps, { logout })(Navbar);

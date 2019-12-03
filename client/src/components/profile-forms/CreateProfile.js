@@ -383,6 +383,7 @@ const CreateProfile = ({
 						</Fragment>
 					)}
 					<Button
+						startIcon={<Icon>add</Icon>}
 						variant='contained'
 						color='primary'
 						type='submit'
