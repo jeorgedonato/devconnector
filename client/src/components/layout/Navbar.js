@@ -13,6 +13,7 @@ import Face from '@material-ui/icons/Face';
 import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Icon from '@material-ui/core/Icon';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
@@ -62,56 +63,74 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
 
 	const authLinks = (
 		<Fragment>
-			<Box component='span' display={{ xs: 'none', md: 'block' }} m={1}>
-				<Button color='inherit' className={classes.btText} startIcon={<Face />}>
-					{user && user.name}
-				</Button>
-				<Button
-					onClick={logout}
-					color='inherit'
-					className={classes.btText}
-					startIcon={<ExitToApp />}
+			<div>
+				<Box component='span' display={{ xs: 'none', md: 'block' }} m={1}>
+					<Button
+						color='inherit'
+						className={classes.btText}
+						startIcon={<Face />}
+					>
+						{user && user.name}
+					</Button>
+					<Button
+						color='inherit'
+						to='/developers'
+						className={classes.btText}
+						component={Link}
+					>
+						Developers
+					</Button>
+					<Button
+						onClick={logout}
+						color='inherit'
+						className={classes.btText}
+						startIcon={<ExitToApp />}
+					>
+						Logout
+					</Button>
+					{/* </Typography> */}
+				</Box>
+				<Box
+					component='span'
+					display={{ xs: 'block', md: 'none' }}
+					m={1}
+					style={{ marginRight: '-16px' }}
 				>
-					Logout
-				</Button>
-				{/* </Typography> */}
-			</Box>
-			<Box
-				component='span'
-				display={{ xs: 'block', md: 'none' }}
-				m={1}
-				style={{ marginRight: '-16px' }}
-			>
-				<IconButton
-					edge='start'
-					className={classes.menuButton}
-					color='inherit'
-					aria-label='more-menu'
-					aria-haspopup='true'
-					onClick={handleClick}
-				>
-					<MenuIcon />
-				</IconButton>
-				<Menu
-					id='more-menu'
-					anchorEl={anchorEl}
-					keepMounted
-					open={Boolean(anchorEl)}
-					onClose={handleClose}
-					classes={{ paper: classes.menuBg }}
-				>
-					<MenuItem>
-						<Face className={classes.colorTextW} />{' '}
-						<Typography className={classes.colorTextW}>
-							{user && user.name}
-						</Typography>
-					</MenuItem>
-					<MenuItem onClick={logout}>
-						<ExitToApp className={classes.colorTextW} />
-						<Typography className={classes.colorTextW}>Logout</Typography>
-					</MenuItem>
-				</Menu>
-			</Box>
+					<IconButton
+						edge='start'
+						className={classes.menuButton}
+						color='inherit'
+						aria-label='more-menu'
+						aria-haspopup='true'
+						onClick={handleClick}
+					>
+						<MenuIcon />
+					</IconButton>
+					<Menu
+						id='more-menu'
+						anchorEl={anchorEl}
+						keepMounted
+						open={Boolean(anchorEl)}
+						onClose={handleClose}
+						classes={{ paper: classes.menuBg }}
+					>
+						<MenuItem>
+							<Face className={classes.colorTextW} />{' '}
+							<Typography className={classes.colorTextW}>
+								{user && user.name}
+							</Typography>
+						</MenuItem>
+						<MenuItem component={Link} to='/developers'>
+							<Icon className={classes.colorTextW}>developer_mode</Icon>{' '}
+							<Typography className={classes.colorTextW}>Developers</Typography>
+						</MenuItem>
+						<MenuItem onClick={logout}>
+							<ExitToApp className={classes.colorTextW} />
+							<Typography className={classes.colorTextW}>Logout</Typography>
+						</MenuItem>
+					</Menu>
+				</Box>
+			</div>
 		</Fragment>
 	);
 
@@ -120,7 +139,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
 			<Box component='span' display={{ xs: 'none', md: 'block' }} m={1}>
 				<Button
 					component={Link}
-					to='/!#'
+					to='/developers'
 					color='inherit'
 					className={classes.btText}
 				>
@@ -170,7 +189,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
 					classes={{ paper: classes.menuBg }}
 				>
 					<MenuItem onClick={handleClose}>
-						<Link to='!#' className={classes.colorTextW}>
+						<Link to='developers' className={classes.colorTextW}>
 							Developers
 						</Link>
 					</MenuItem>
@@ -190,26 +209,28 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
 	);
 
 	return (
-		<div className={classes.root}>
-			<AppBar position='static'>
-				<Toolbar className='bg-dark'>
-					<Typography variant='h6' className={classes.title}>
-						<Button
-							component={Link}
-							to='/'
-							color='inherit'
-							className={classes.btText}
-							startIcon={<CodeIcon />}
-						>
-							DevConnector
-						</Button>
-					</Typography>
-					{!loading && (
-						<Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
-					)}
-				</Toolbar>
-			</AppBar>
-		</div>
+		<Fragment>
+			<div className={classes.root}>
+				<AppBar position='static'>
+					<Toolbar className='bg-dark'>
+						<Typography variant='h6' className={classes.title}>
+							<Button
+								component={Link}
+								to='/'
+								color='inherit'
+								className={classes.btText}
+								startIcon={<CodeIcon />}
+							>
+								DevConnector
+							</Button>
+						</Typography>
+						{!loading && (
+							<Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+						)}
+					</Toolbar>
+				</AppBar>
+			</div>
+		</Fragment>
 	);
 };
 

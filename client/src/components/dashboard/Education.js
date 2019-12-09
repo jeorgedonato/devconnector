@@ -13,6 +13,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Icon from '@material-ui/core/Icon';
+import { deleteEducation } from '../../actions/profile';
 
 const useStyles = makeStyles({
 	root: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles({
 	}
 });
 
-const Education = ({ education }) => {
+const Education = ({ education, deleteEducation }) => {
 	const classes = useStyles();
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -74,7 +75,12 @@ const Education = ({ education }) => {
 												)}
 											</TableCell>
 											<TableCell>
-												<Button startIcon={<Icon>delete</Icon>}></Button>
+												<Button
+													onClick={() => deleteEducation(edu._id)}
+													variant='contained'
+													color='secondary'
+													startIcon={<Icon>delete</Icon>}
+												></Button>
 											</TableCell>
 										</TableRow>
 									);
@@ -100,4 +106,4 @@ Education.propTypes = {
 	education: PropTypes.array.isRequired
 };
 
-export default Education;
+export default connect(null, { deleteEducation })(Education);

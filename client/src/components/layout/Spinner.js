@@ -3,14 +3,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default () => (
 	<Fragment>
-		<div style={{ textAlign: 'center' }}>
+		<div style={{ marginTop: '20rem', marginBottom: '3rem' }}>
 			<CircularProgress
 				style={{
-					display: 'block',
-					// margin: '250px 0px 20px 250px',
-					width: '160px',
-					height: '160px'
-					// top: '-50px'
+					width: '200px',
+					margin: 'auto',
+					display: 'block'
 				}}
 			/>
 		</div>

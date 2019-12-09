@@ -14,10 +14,9 @@ const Post = require('../../models/Post');
 //@access   Private
 router.get('/me', auth, async (req, res) => {
 	try {
-		const profile = await Profile.findOne({ user: req.user.id }).populate(
-			'user',
-			['name', 'avatar']
-		);
+		const profile = await Profile.findOne({
+			user: req.user.id
+		}).populate('user', ['name', 'avatar']);
 
 		if (!profile) {
 			return res.status(400).json({ msg: 'There is no Profile for this user' });
@@ -155,7 +154,9 @@ router.get('/user/:user_id', async (req, res) => {
 //@access   Private
 router.delete('/', auth, async (req, res) => {
 	try {
-		//TODO Delete posts from user
+		//remove user posts
+		await Post.deleteMany({ user: req.user.id });
+
 		await Profile.findOneAndRemove({ user: req.user.id });
 
 		await User.findOneAndRemove({ _id: req.user.id });

@@ -15,6 +15,7 @@ import { setAlert } from '../../actions/alert';
 import { Button } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { createProfile, getCurrentProfile } from '../../actions/profile';
+import Spinner from '../layout/Spinner'
 
 const useStyles = makeStyles(theme => ({
 	'@global': {
@@ -46,8 +47,6 @@ const useStyles = makeStyles(theme => ({
 
 const EditProfile = ({
 	profile: { profile, loading },
-	isAuthenticated,
-	setAlert,
 	createProfile,
 	history,
 	getCurrentProfile
@@ -94,7 +93,7 @@ const EditProfile = ({
 		});
 		// eslint-disable-next-line
 		loading || profile.social ? setShowSocial(true) : setShowSocial(false);
-	}, [loading]);
+	}, [loading, getCurrentProfile]);
 
 	const {
 		company,
@@ -116,6 +115,12 @@ const EditProfile = ({
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	// console.log(formData);
 
+	const handleGoBack = e => {
+		e.preventDefault();
+
+		history.goBack();
+	}
+
 	const onSubmit = e => {
 		e.preventDefault();
 
@@ -130,301 +135,302 @@ const EditProfile = ({
 
 	return (
 		<Fragment>
-			<div style={{ marginTop: '6rem', marginBottom: '3rem' }}>
-				<div style={{ display: 'block' }}>
-					<Typography component='h1' variant='h5' color='textPrimary'>
-						Edit Your Profile
+			{loading ? (<Spinner />) : (
+				<div style={{ marginTop: '6rem', marginBottom: '3rem' }}>
+					<div style={{ display: 'block' }}>
+						<Typography component='h1' variant='h5' color='textPrimary'>
+							Edit Your Profile
 					</Typography>
-					<Typography component='p' style={{ display: 'flex' }}>
-						<Icon fontSize='small'>person_outline</Icon>
-						<Typography component='span' variant='body1'>
-							Let's get some information to make your profile stand out
+						<Typography component='p' style={{ display: 'flex' }}>
+							<Icon fontSize='small'>person_outline</Icon>
+							<Typography component='span' variant='body1'>
+								Let's get some information to make your profile stand out
 						</Typography>
-					</Typography>
-				</div>
+						</Typography>
+					</div>
 
-				<form className={classes.form} onSubmit={e => onSubmit(e)}>
-					<FormControl
-						fullWidth
-						className={clsx(
-							classes.margin,
-							classes.textField,
-							classes.formControl
-						)}
-						required
-					>
-						<InputLabel shrink id='profile-status-label'>
-							Professional Status
+					<form className={classes.form} onSubmit={e => onSubmit(e)}>
+						<FormControl
+							fullWidth
+							className={clsx(
+								classes.margin,
+								classes.textField,
+								classes.formControl
+							)}
+							required
+						>
+							<InputLabel shrink id='profile-status-label'>
+								Professional Status
 						</InputLabel>
-						<Select
-							labelId='profile-status-label'
-							id='profile-status'
-							value={status}
-							onChange={e => onChange(e)}
-							displayEmpty
-							name='status'
+							<Select
+								labelId='profile-status-label'
+								id='profile-status'
+								value={status}
+								onChange={e => onChange(e)}
+								displayEmpty
+								name='status'
 							// className={classes.selectEmpty}
+							>
+								<MenuItem value=''>
+									<em>Please select</em>
+								</MenuItem>
+								<MenuItem value={'Software Engineer'}>Software Engineer</MenuItem>
+								<MenuItem value={'Software Developer'}>
+									Software Developer
+							</MenuItem>
+								<MenuItem value={'Junior Developer'}>Junior Developer</MenuItem>
+								<MenuItem value={'Senior Developer'}>Senior Developer</MenuItem>
+								<MenuItem value={'Manager'}>Manager</MenuItem>
+								<MenuItem value={'Student or Learner'}>
+									Student or Learner
+							</MenuItem>
+								<MenuItem value={'Instructor or Teacher'}>
+									Instructor or Teacher
+							</MenuItem>
+								<MenuItem value={'Intern'}>Intern</MenuItem>
+								<MenuItem value={'Other'}>Other</MenuItem>
+							</Select>
+							<FormHelperText>
+								Give us an idea of where you are at in your career
+						</FormHelperText>
+						</FormControl>
+						<FormControl
+							fullWidth
+							className={clsx(
+								classes.margin,
+								classes.textField,
+								classes.formControl
+							)}
 						>
-							<MenuItem value=''>
-								<em>Please select</em>
-							</MenuItem>
-							<MenuItem value={'Software Engineer'}>Software Engineer</MenuItem>
-							<MenuItem value={'Software Developer'}>
-								Software Developer
-							</MenuItem>
-							<MenuItem value={'Junior Developer'}>Junior Developer</MenuItem>
-							<MenuItem value={'Senior Developer'}>Senior Developer</MenuItem>
-							<MenuItem value={'Manager'}>Manager</MenuItem>
-							<MenuItem value={'Student or Learner'}>
-								Student or Learner
-							</MenuItem>
-							<MenuItem value={'Instructor or Teacher'}>
-								Instructor or Teacher
-							</MenuItem>
-							<MenuItem value={'Intern'}>Intern</MenuItem>
-							<MenuItem value={'Other'}>Other</MenuItem>
-						</Select>
-						<FormHelperText>
-							Give us an idea of where you are at in your career
+							<TextField
+								id='company-input'
+								label='Company'
+								fullWidth
+								onChange={e => onChange(e)}
+								margin='dense'
+								value={company}
+								name='company'
+							/>
+							<FormHelperText>
+								Could be your own company or one you work for
 						</FormHelperText>
-					</FormControl>
-					<FormControl
-						fullWidth
-						className={clsx(
-							classes.margin,
-							classes.textField,
-							classes.formControl
-						)}
-					>
-						<TextField
-							id='company-input'
-							label='Company'
+						</FormControl>
+						<FormControl
 							fullWidth
-							onChange={e => onChange(e)}
-							margin='dense'
-							value={company}
-							name='company'
-						/>
-						<FormHelperText>
-							Could be your own company or one you work for
-						</FormHelperText>
-					</FormControl>
-					<FormControl
-						fullWidth
-						className={clsx(
-							classes.margin,
-							classes.textField,
-							classes.formControl
-						)}
-					>
-						<TextField
-							id='website-input'
-							label='Website'
-							fullWidth
-							onChange={e => onChange(e)}
-							margin='dense'
-							value={website}
-							name='website'
-						/>
-						<FormHelperText>
-							Could be your own or a company website
-						</FormHelperText>
-					</FormControl>
-					<FormControl
-						fullWidth
-						className={clsx(
-							classes.margin,
-							classes.textField,
-							classes.formControl
-						)}
-					>
-						<TextField
-							id='location-input'
-							label='Location'
-							fullWidth
-							onChange={e => onChange(e)}
-							name='location'
-							margin='dense'
-							value={location}
-						/>
-						<FormHelperText>
-							City & state suggested (eg. Boston, MA)
-						</FormHelperText>
-					</FormControl>
-					<FormControl
-						fullWidth
-						required
-						className={clsx(
-							classes.margin,
-							classes.textField,
-							classes.formControl
-						)}
-					>
-						<TextField
-							id='skills-input'
-							label='Skills *'
-							fullWidth
-							onChange={e => onChange(e)}
-							margin='dense'
-							value={skills}
-							name='skills'
-						/>
-						<FormHelperText>
-							Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)
-						</FormHelperText>
-					</FormControl>
-					<FormControl
-						fullWidth
-						className={clsx(
-							classes.margin,
-							classes.textField,
-							classes.formControl
-						)}
-					>
-						<TextField
-							id='githubusername-input'
-							label='Github Username URL'
-							fullWidth
-							onChange={e => onChange(e)}
-							margin='dense'
-							value={githubusername}
-							name='githubusername'
-						/>
-					</FormControl>
-					<TextField
-						id='standard-multiline-flexible'
-						label='Tell us about yourself'
-						multiline
-						rowsMax='4'
-						value={bio}
-						onChange={e => onChange(e)}
-						className={classes.textField}
-						margin='dense'
-						name='bio'
-						fullWidth
-					/>
-					<Typography style={{ marginBottom: '5px' }}>
-						<Button
-							startIcon={<Icon>add</Icon>}
-							onClick={() => setShowSocial(!showSocial)}
+							className={clsx(
+								classes.margin,
+								classes.textField,
+								classes.formControl
+							)}
 						>
-							Add Social Media Links
+							<TextField
+								id='website-input'
+								label='Website'
+								fullWidth
+								onChange={e => onChange(e)}
+								margin='dense'
+								value={website}
+								name='website'
+							/>
+							<FormHelperText>
+								Could be your own or a company website
+						</FormHelperText>
+						</FormControl>
+						<FormControl
+							fullWidth
+							className={clsx(
+								classes.margin,
+								classes.textField,
+								classes.formControl
+							)}
+						>
+							<TextField
+								id='location-input'
+								label='Location'
+								fullWidth
+								onChange={e => onChange(e)}
+								name='location'
+								margin='dense'
+								value={location}
+							/>
+							<FormHelperText>
+								City & state suggested (eg. Boston, MA)
+						</FormHelperText>
+						</FormControl>
+						<FormControl
+							fullWidth
+							required
+							className={clsx(
+								classes.margin,
+								classes.textField,
+								classes.formControl
+							)}
+						>
+							<TextField
+								id='skills-input'
+								label='Skills *'
+								fullWidth
+								onChange={e => onChange(e)}
+								margin='dense'
+								value={skills}
+								name='skills'
+							/>
+							<FormHelperText>
+								Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)
+						</FormHelperText>
+						</FormControl>
+						<FormControl
+							fullWidth
+							className={clsx(
+								classes.margin,
+								classes.textField,
+								classes.formControl
+							)}
+						>
+							<TextField
+								id='githubusername-input'
+								label='Github Username URL'
+								fullWidth
+								onChange={e => onChange(e)}
+								margin='dense'
+								value={githubusername}
+								name='githubusername'
+							/>
+						</FormControl>
+						<TextField
+							id='standard-multiline-flexible'
+							label='Tell us about yourself'
+							multiline
+							rowsMax='4'
+							value={bio}
+							onChange={e => onChange(e)}
+							className={classes.textField}
+							margin='dense'
+							name='bio'
+							fullWidth
+						/>
+						<Typography style={{ marginBottom: '5px' }}>
+							<Button
+								startIcon={<Icon>add</Icon>}
+								onClick={() => setShowSocial(!showSocial)}
+							>
+								Add Social Media Links
 						</Button>
-					</Typography>
+						</Typography>
 
-					{showSocial && (
-						<Fragment>
-							<FormControl
-								fullWidth
-								className={clsx(
-									classes.margin,
-									classes.textField,
-									classes.formControl
-								)}
-							>
-								<TextField
-									id='twitter-input'
-									label='Twitter URL'
+						{showSocial && (
+							<Fragment>
+								<FormControl
 									fullWidth
-									onChange={e => onChange(e)}
-									margin='dense'
-									value={twitter}
-									name='twitter'
-								/>
-							</FormControl>
-							<FormControl
-								fullWidth
-								className={clsx(
-									classes.margin,
-									classes.textField,
-									classes.formControl
-								)}
-							>
-								<TextField
-									id='facebook-input'
-									label='Facebook URL'
+									className={clsx(
+										classes.margin,
+										classes.textField,
+										classes.formControl
+									)}
+								>
+									<TextField
+										id='twitter-input'
+										label='Twitter URL'
+										fullWidth
+										onChange={e => onChange(e)}
+										margin='dense'
+										value={twitter}
+										name='twitter'
+									/>
+								</FormControl>
+								<FormControl
 									fullWidth
-									onChange={e => onChange(e)}
-									margin='dense'
-									value={facebook}
-									name='facebook'
-								/>
-							</FormControl>
-							<FormControl
-								fullWidth
-								className={clsx(
-									classes.margin,
-									classes.textField,
-									classes.formControl
-								)}
-							>
-								<TextField
-									id='linkedin-input'
-									label='Linkedin URL'
+									className={clsx(
+										classes.margin,
+										classes.textField,
+										classes.formControl
+									)}
+								>
+									<TextField
+										id='facebook-input'
+										label='Facebook URL'
+										fullWidth
+										onChange={e => onChange(e)}
+										margin='dense'
+										value={facebook}
+										name='facebook'
+									/>
+								</FormControl>
+								<FormControl
 									fullWidth
-									onChange={e => onChange(e)}
-									margin='dense'
-									value={linkedin}
-									name='linkedin'
-								/>
-							</FormControl>
-							<FormControl
-								fullWidth
-								className={clsx(
-									classes.margin,
-									classes.textField,
-									classes.formControl
-								)}
-							>
-								<TextField
-									id='youtube-input'
-									label='Youtube URL'
+									className={clsx(
+										classes.margin,
+										classes.textField,
+										classes.formControl
+									)}
+								>
+									<TextField
+										id='linkedin-input'
+										label='Linkedin URL'
+										fullWidth
+										onChange={e => onChange(e)}
+										margin='dense'
+										value={linkedin}
+										name='linkedin'
+									/>
+								</FormControl>
+								<FormControl
 									fullWidth
-									onChange={e => onChange(e)}
-									margin='dense'
-									value={youtube}
-									name='youtube'
-								/>
-							</FormControl>
-							<FormControl
-								fullWidth
-								className={clsx(
-									classes.margin,
-									classes.textField,
-									classes.formControl
-								)}
-							>
-								<TextField
-									id='instagram-input'
-									label='Instagram URL'
+									className={clsx(
+										classes.margin,
+										classes.textField,
+										classes.formControl
+									)}
+								>
+									<TextField
+										id='youtube-input'
+										label='Youtube URL'
+										fullWidth
+										onChange={e => onChange(e)}
+										margin='dense'
+										value={youtube}
+										name='youtube'
+									/>
+								</FormControl>
+								<FormControl
 									fullWidth
-									onChange={e => onChange(e)}
-									margin='dense'
-									value={instagram}
-									name='instagram'
-								/>
-							</FormControl>
-						</Fragment>
-					)}
-					<Button
-						startIcon={<Icon>save</Icon>}
-						variant='contained'
-						color='primary'
-						type='submit'
-						style={{ marginRight: '2px' }}
-					>
-						Update
+									className={clsx(
+										classes.margin,
+										classes.textField,
+										classes.formControl
+									)}
+								>
+									<TextField
+										id='instagram-input'
+										label='Instagram URL'
+										fullWidth
+										onChange={e => onChange(e)}
+										margin='dense'
+										value={instagram}
+										name='instagram'
+									/>
+								</FormControl>
+							</Fragment>
+						)}
+						<Button
+							startIcon={<Icon>save</Icon>}
+							variant='contained'
+							color='primary'
+							type='submit'
+							style={{ marginRight: '2px' }}
+						>
+							Update
 					</Button>
 
-					<Button
-						component={Link}
-						to='/dashboard'
-						startIcon={<Icon>arrow_back</Icon>}
-					>
-						Go Back
+						<Button
+							onClick={handleGoBack}
+							startIcon={<Icon>arrow_back</Icon>}
+						>
+							Go Back
 					</Button>
-				</form>
-			</div>
+					</form>
+				</div>
+			)}
 		</Fragment>
 	);
 };

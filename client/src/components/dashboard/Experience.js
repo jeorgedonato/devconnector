@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -14,6 +13,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Icon from '@material-ui/core/Icon';
+import { deleteExperience } from '../../actions/profile';
 
 const useStyles = makeStyles({
 	root: {
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 	}
 });
 
-const Experience = ({ experience }) => {
+const Experience = ({ experience, deleteExperience }) => {
 	const classes = useStyles();
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -75,7 +75,12 @@ const Experience = ({ experience }) => {
 												)}
 											</TableCell>
 											<TableCell>
-												<Button startIcon={<Icon>delete</Icon>}></Button>
+												<Button
+													variant='contained'
+													color='secondary'
+													startIcon={<Icon>delete</Icon>}
+													onClick={() => deleteExperience(exp._id)}
+												></Button>
 											</TableCell>
 										</TableRow>
 									);
@@ -98,7 +103,8 @@ const Experience = ({ experience }) => {
 };
 
 Experience.propTypes = {
-	experience: PropTypes.array.isRequired
+	experience: PropTypes.array.isRequired,
+	deleteExperience: PropTypes.func.isRequired
 };
 
-export default Experience;
+export default connect(null, { deleteExperience })(Experience);

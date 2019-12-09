@@ -89,7 +89,7 @@ const Login = ({ login, isAuthenticated }) => {
 					<Typography component='p' style={{ display: 'flex' }}>
 						<Icon fontSize='small'>person</Icon>
 						<Typography component='span' variant='body1'>
-							Sign In to your account
+							&nbsp;Sign In to your account
 						</Typography>
 					</Typography>
 				</div>
@@ -126,6 +126,7 @@ const Login = ({ login, isAuthenticated }) => {
 							endAdornment={
 								<InputAdornment position='end'>
 									<IconButton
+										tabIndex='-1'
 										aria-label='toggle password visibility'
 										onClick={handleClickShowPassword}
 										onMouseDown={handleMouseDownPassword}

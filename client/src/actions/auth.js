@@ -19,6 +19,13 @@ export const loadUser = () => async dispatch => {
 	}
 
 	try {
+		// const config = {
+		// 	proxy: {
+		// 		host: 'localhost',
+		// 		port: '5000'
+		// 	}
+		// };
+
 		const res = await axios.get('/api/auth');
 
 		dispatch({

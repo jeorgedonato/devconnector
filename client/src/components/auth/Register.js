@@ -76,7 +76,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 	const onSubmit = e => {
 		e.preventDefault();
 		if (password !== cpassword) {
-			setFormData({ ...formData, password: '', cpassword: '' });
+			// setFormData({ ...formData, password: '', cpassword: '' });
 			setAlert('Passwords don`t match ', 'error');
 		} else {
 			register({ name, email, password });
@@ -98,7 +98,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 					<Typography component='p' style={{ display: 'flex' }}>
 						<Icon fontSize='small'>person_add</Icon>
 						<Typography component='span' variant='body1'>
-							Create your account
+							&nbsp;Create your account
 						</Typography>
 					</Typography>
 				</div>
@@ -150,6 +150,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 							endAdornment={
 								<InputAdornment position='end'>
 									<IconButton
+										tabIndex='-1'
 										aria-label='toggle password visibility'
 										onClick={handleClickShowPassword}
 										onMouseDown={handleMouseDownPassword}
@@ -177,6 +178,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 							endAdornment={
 								<InputAdornment position='end'>
 									<IconButton
+										tabIndex='-1'
 										aria-label='toggle password visibility'
 										onClick={handleClickShowPassword}
 										onMouseDown={handleMouseDownPassword}
