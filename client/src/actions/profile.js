@@ -14,12 +14,6 @@ import {
 //Get Current users profile
 export const getCurrentProfile = () => async dispatch => {
 	try {
-		// const config = {
-		// 	proxy: {
-		// 		host: 'localhost',
-		// 		port: '5000'
-		// 	}
-		// };
 		const res = await axios.get('/api/profile/me');
 
 		dispatch({
